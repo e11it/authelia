@@ -5,7 +5,7 @@ import VerifyIsSecondFactorStage from "../../../helpers/assertions/VerifyIsSecon
 
 export default function() {
   describe('Authelia regulates authentications when a hacker is brute forcing', function() {
-    this.timeout(15000);
+    this.timeout(30000);
     beforeEach(async function() {
       this.driver = await StartDriver();
     });
@@ -16,19 +16,19 @@ export default function() {
 
     it("should return an error message when providing correct credentials the 4th time.", async function() {
       await LoginAs(this.driver, "blackhat", "bad-password");
-      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Please check your credentials.");
+      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Check your credentials.");
       await LoginAs(this.driver, "blackhat", "bad-password");
-      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Please check your credentials.");
+      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Check your credentials.");
       await LoginAs(this.driver, "blackhat", "bad-password");
-      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Please check your credentials.");
+      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Check your credentials.");
 
       // when providing good credentials, the hacker is regulated and see same message as previously.
       await LoginAs(this.driver, "blackhat", "bad-password");
-      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Please check your credentials.");
+      await VerifyNotificationDisplayed(this.driver, "Authentication failed. Check your credentials.");
 
       // Wait the regulation ban time before retrying with correct credentials.
       // It should authenticate normally.
-      await this.driver.sleep(6000);
+      await this.driver.sleep(12000);
       await LoginAs(this.driver, "blackhat", "password");
       await VerifyIsSecondFactorStage(this.driver);
     });

@@ -10,6 +10,8 @@ port: 80
 # Level of verbosity for logs
 logs_level: debug
 
+secret: an_unsecure_secret
+
 # Default redirection URL
 #
 # If user tries to authenticate without any referer, Authelia
@@ -195,20 +197,9 @@ notifier:
   # For testing purpose, notifications can be sent in a file
   # filesystem:
   #   filename: /tmp/authelia/notification.txt
-
-  # Use your email account to send the notifications. You can use an app password.
-  # List of valid services can be found here: https://nodemailer.com/smtp/well-known/  
-  # email:
-  #   username: authelia@gmail.com
-  #   password: password
-  #   sender: authelia@example.com
-  #   service: gmail
   
   # Use a SMTP server for sending notifications
   smtp:
-    username: test
-    password: password
-    secure: false
     host: 'mailcatcher-service'
     port: 1025
     sender: admin@example.com

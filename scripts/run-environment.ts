@@ -57,6 +57,7 @@ async function start() {
   console.log('>>> Setting up environment <<<');
   try {
     await setup();
+    await sleep(200);
     clearTimeout(timer);
     await blockOrRun(command);
     if (!teardownInProgress) {
