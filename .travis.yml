@@ -1,7 +1,7 @@
-language: node_js
+language: go
 required: sudo
-node_js:
-- '9'
+go:
+- '1.13'
 services:
 - docker
 - ntp
@@ -15,6 +15,8 @@ addons:
     - google-chrome-stable
 
 before_script:
+- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+- nvm install v9 && nvm use v9 && npm i
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - sleep 3
