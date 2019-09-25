@@ -20,14 +20,14 @@ type RegulatorSuite struct {
 	suite.Suite
 
 	ctrl          *gomock.Controller
-	storageMock   *mocks.MockProvider
+	storageMock   *mocks.MockStorageProvider
 	configuration schema.RegulationConfiguration
 	now           time.Time
 }
 
 func (s *RegulatorSuite) SetupTest() {
 	s.ctrl = gomock.NewController(s.T())
-	s.storageMock = mocks.NewMockProvider(s.ctrl)
+	s.storageMock = mocks.NewMockStorageProvider(s.ctrl)
 
 	s.configuration = schema.RegulationConfiguration{
 		MaxRetries: 3,
