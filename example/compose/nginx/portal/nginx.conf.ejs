@@ -18,7 +18,7 @@ http {
         resolver 127.0.0.11 ipv6=off;
         set $backend_endpoint <%= authelia_backend %>;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -62,7 +62,7 @@ http {
         set $frontend_endpoint http://192.168.240.1:3000;
         set $backend_endpoint <%= authelia_backend %>;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -108,7 +108,7 @@ http {
         resolver 127.0.0.11 ipv6=off;
         set $upstream_endpoint http://nginx-backend;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -135,7 +135,7 @@ http {
         set $upstream_endpoint http://nginx-backend;
         set $upstream_headers http://httpbin:8000/headers;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -227,7 +227,7 @@ http {
         resolver 127.0.0.11 ipv6=off;
         set $upstream_endpoint http://smtp:1080;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -247,7 +247,7 @@ http {
         resolver 127.0.0.11 ipv6=off;
         set $upstream_endpoint http://duo-api:3000;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -264,7 +264,7 @@ http {
 	    listen 8080 ssl;
 	    server_name _;
 
-        ssl_certificate     /etc/ssl/server.crt;
+        ssl_certificate     /etc/ssl/server.cert;
         ssl_certificate_key /etc/ssl/server.key;
 
 	    return 301 https://home.example.com:8080/;
