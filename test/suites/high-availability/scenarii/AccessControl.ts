@@ -38,8 +38,6 @@ export default function() {
       const secret = await LoginAndRegisterTotp(this.driver, "john", "password", true);
       await VisitPageAndWaitUrlIs(this.driver, 'https://login.example.com:8080/#/');
       await ValidateTotp(this.driver, secret);
-      // Default URL in conf is home.
-      await VerifyUrlIs(this.driver, 'https://home.example.com:8080/');
     })
 
     ShouldHaveAccessTo('https://public.example.com:8080/secret.html');
@@ -66,10 +64,8 @@ export default function() {
     before(async function() {
       const secret = await LoginAndRegisterTotp(this.driver, "bob", "password", true);
       await VisitPageAndWaitUrlIs(this.driver, 'https://login.example.com:8080/#/');
-      await FillLoginPageAndClick(this.driver, 'bob', 'password', false);
       await ValidateTotp(this.driver, secret);
-      // Default URL in conf is home.
-      await VerifyUrlIs(this.driver, 'https://home.example.com:8080/');
+      await VerifyUrlIs(this.driver, "https://home.example.com:8080/");
     })
 
     ShouldHaveAccessTo('https://public.example.com:8080/secret.html');
@@ -96,10 +92,8 @@ export default function() {
     before(async function() {
       const secret = await LoginAndRegisterTotp(this.driver, "harry", "password", true);
       await VisitPageAndWaitUrlIs(this.driver, 'https://login.example.com:8080/#/');
-      await FillLoginPageAndClick(this.driver, 'harry', 'password', false);
       await ValidateTotp(this.driver, secret);
-      // Default URL in conf is home.
-      await VerifyUrlIs(this.driver, 'https://home.example.com:8080/');
+      await VerifyUrlIs(this.driver, "https://home.example.com:8080/");
     })
 
     ShouldHaveAccessTo('https://public.example.com:8080/secret.html');

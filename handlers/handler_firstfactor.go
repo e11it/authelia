@@ -58,7 +58,13 @@ func FirstFactorPost(ctx *middlewares.AutheliaCtx) {
 	ctx.Logger.Debugf("Credentials validation of user %s is ok", bodyJSON.Username)
 
 	// Reset all values from previous session before regenerating the cookie.
-	ctx.SaveSession(session.NewDefaultUserSession())
+	err = ctx.SaveSession(session.NewDefaultUserSession())
+
+	if err != nil {
+		ctx.Error(fmt.Errorf("Unable to reset the session for user %s: %s", bodyJSON.Username, err), authenticationFailedMessage)
+		return
+	}
+
 	err = ctx.Providers.SessionProvider.RegenerateSession(ctx.RequestCtx)
 
 	if err != nil {
@@ -68,7 +74,11 @@ func FirstFactorPost(ctx *middlewares.AutheliaCtx) {
 
 	// and avoid the cookie to expire if "Remember me" was ticked.
 	if *bodyJSON.KeepMeLoggedIn {
-		ctx.Providers.SessionProvider.UpdateExpiration(ctx.RequestCtx, time.Duration(0))
+		err = ctx.Providers.SessionProvider.UpdateExpiration(ctx.RequestCtx, time.Duration(0))
+		if err != nil {
+			ctx.Error(fmt.Errorf("Unable to update expiration timer for user %s: %s", bodyJSON.Username, err), authenticationFailedMessage)
+			return
+		}
 	}
 
 	// Get the details of the given user from the user provider.
@@ -88,7 +98,12 @@ func FirstFactorPost(ctx *middlewares.AutheliaCtx) {
 	userSession.Emails = userDetails.Emails
 	userSession.AuthenticationLevel = authentication.OneFactor
 	userSession.LastActivity = time.Now().Unix()
-	ctx.SaveSession(userSession)
+	err = ctx.SaveSession(userSession)
+
+	if err != nil {
+		ctx.Error(fmt.Errorf("Unable to save session of user %s", bodyJSON.Username), authenticationFailedMessage)
+		return
+	}
 
 	if bodyJSON.TargetURL != "" {
 		targetURL, err := url.ParseRequestURI(bodyJSON.TargetURL)
@@ -102,7 +117,7 @@ func FirstFactorPost(ctx *middlewares.AutheliaCtx) {
 			IP:       ctx.RemoteIP(),
 		}, *targetURL)
 
-		ctx.Logger.Debugf("Required level for the given URL is %d", requiredLevel)
+		ctx.Logger.Debugf("Required level for the URL %s is %d", targetURL.String(), requiredLevel)
 
 		safeRedirection := isRedirectionSafe(*targetURL, ctx.Configuration.Session.Domain)
 

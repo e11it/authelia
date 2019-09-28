@@ -26,7 +26,6 @@ export default function() {
     });
   
     afterEach(async function() {
-      await Logout(this.driver);
       await StopDriver(this.driver);
     })
   
@@ -57,24 +56,24 @@ export default function() {
       CannotRedirectTo("https://www.google.fr");
     });
 
-    describe('Cannot redirect to https://public.example.com.a:8080', function() {
+    describe('Cannot redirect to https://public.example.com.a:8080/secret.html', function() {
       // Do not redirect to another domain than example.com
-      CannotRedirectTo("https://public.example.com.a:8080");
+      CannotRedirectTo("https://public.example.com.a:8080/secret.html");
     });
 
-    describe('Cannot redirect to http://secure.example.com:8080', function() {
+    describe('Cannot redirect to http://secure.example.com:8080/secret.html', function() {
       // Do not redirect to http website
-      CannotRedirectTo("http://secure.example.com:8080");
+      CannotRedirectTo("http://secure.example.com:8080/secret.html");
     });
 
-    describe('Cannot redirect to http://singlefactor.example.com:8080', function() {
+    describe.only('Cannot redirect to http://singlefactor.example.com:8080/secret.html', function() {
       // Do not redirect to http website
-      CannotRedirectTo("http://singlefactor.example.com:8080", false);
+      CannotRedirectTo("http://singlefactor.example.com:8080/secret.html", false);
     });
 
-    describe('Can redirect to https://secure.example.com:8080/', function() {
+    describe('Can redirect to https://secure.example.com:8080/secret.html', function() {
       // Can redirect to any subdomain of the domain protected by Authelia.
-      CanRedirectTo("https://secure.example.com:8080/");
+      CanRedirectTo("https://secure.example.com:8080/secret.html");
     });
   });
 }

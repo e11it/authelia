@@ -14,7 +14,7 @@ AutheliaSuite(__dirname, function() {
   describe('Custom headers forwarded to backend', CustomHeadersForwarded);
   describe('Access control', AccessControl);
   describe('Mongo broken connection recovery', MongoConnectionRecovery);
-  describe('Enforce internal redirections only', EnforceInternalRedirectionsOnly);
+  describe.only('Enforce internal redirections only', EnforceInternalRedirectionsOnly);
   describe('Single-factor authentication', SingleFactorAuthentication());
   describe('Basic authentication', BasicAuthentication);
   describe('Authelia restart', AutheliaRestart);

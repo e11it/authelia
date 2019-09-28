@@ -250,15 +250,16 @@ func VerifyGet(ctx *middlewares.AutheliaCtx) {
 		setForwardedHeaders(&ctx.Response.Header, username, groups)
 	}
 
-	if !hasBasicAuth {
+	// We mark activity of the current user if he comes with a session cookie.
+	if !hasBasicAuth && username != "" {
 		// Mark current activity
 		userSession := ctx.GetSession()
 		userSession.LastActivity = time.Now().Unix()
 		err = ctx.SaveSession(userSession)
-	}
 
-	if err != nil {
-		ctx.Error(fmt.Errorf("Unable to update last activity: %s", err), operationFailedMessage)
-		return
+		if err != nil {
+			ctx.Error(fmt.Errorf("Unable to update last activity: %s", err), operationFailedMessage)
+			return
+		}
 	}
 }
