@@ -22,7 +22,6 @@ EXPOSE 9091
 VOLUME /etc/authelia
 VOLUME /var/lib/authelia
 WORKDIR /usr/src
-USER node
 COPY --from=build /usr/src/node_modules node_modules
 COPY --from=build /usr/src/dist/server server
 
