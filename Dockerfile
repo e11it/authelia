@@ -1,15 +1,13 @@
-FROM node:8.7.0-alpine
+FROM node:8.7.0-alpine AS build
 
 WORKDIR /usr/src
 
-COPY package.json /usr/src/package.json
+# Bundle app source
+COPY . .
 
 RUN apk --update add --no-cache --virtual \
       .build-deps bash make g++ python && \
     npm install --production
-
-# Bundle app source
-COPY . .
 
 RUN npm i 
 RUN cd client && npm install && cd ..
@@ -19,9 +17,13 @@ RUN bash ./scripts/authelia-scripts-build
 #COPY dist/server /usr/src/server
 RUN apk del .build-deps
 
+FROM node:8.7.0-alpine
 EXPOSE 9091
-
 VOLUME /etc/authelia
 VOLUME /var/lib/authelia
+WORKDIR /usr/src
+USER node
+COPY --from=build /usr/src/node_modules node_modules
+COPY --from=build /usr/src/dist/server server
 
-CMD ["node", "dist/server/src/index.js", "/etc/authelia/config.yml"]
+CMD ["node", "server/src/index.js", "/etc/authelia/config.yml"]
