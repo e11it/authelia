@@ -58,7 +58,7 @@ export class Session implements ISession {
     else if (userGroupsFilter.indexOf("{dn}") > 0) {
       return this.searchUserDn(username)
         .then(function (userDN: string) {
-          return BluebirdPromise.resolve(userGroupsFilter.replace("{dn}", userDN));
+          return BluebirdPromise.resolve(userGroupsFilter.replace("{dn}", ldapEscape.filter`${userDN}`));
         });
     }
     else if (userGroupsFilter.indexOf("{uid}") > 0) {
@@ -74,11 +74,11 @@ export class Session implements ISession {
     const that = this;
     return this.createGroupsFilter(this.options.groups_filter, username)
       .then(function (groupsFilter: string) {
-        that.logger.debug("Computed groups filter is %s", ldapEscape.filter`${groupsFilter}`);
+        that.logger.debug("Computed groups filter is %s", groupsFilter);
         const query = {
           scope: "sub",
           attributes: [that.options.group_name_attribute],
-          filter: ldapEscape.filter`${groupsFilter}`
+          filter: groupsFilter
         };
         return that.connector.searchAsync(that.groupsSearchBase, query);
       })
