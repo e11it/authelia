@@ -4,6 +4,7 @@ import { ISession } from "./ISession";
 import { LdapConfiguration } from "../../../configuration/schema/LdapConfiguration";
 import { Winston } from "../../../../../types/Dependencies";
 import Util = require("util");
+import ldapEscape = require("ldap-escape");
 import { HashGenerator } from "../../../utils/HashGenerator";
 import { IConnector } from "./connector/IConnector";
 
@@ -73,11 +74,11 @@ export class Session implements ISession {
     const that = this;
     return this.createGroupsFilter(this.options.groups_filter, username)
       .then(function (groupsFilter: string) {
-        that.logger.debug("Computed groups filter is %s", groupsFilter);
+        that.logger.debug("Computed groups filter is %s", ldapEscape.filter(groupsFilter));
         const query = {
           scope: "sub",
           attributes: [that.options.group_name_attribute],
-          filter: groupsFilter
+          filter: ldapEscape.filter(groupsFilter)
         };
         return that.connector.searchAsync(that.groupsSearchBase, query);
       })
