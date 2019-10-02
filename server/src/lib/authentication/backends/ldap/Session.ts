@@ -58,7 +58,7 @@ export class Session implements ISession {
     else if (userGroupsFilter.indexOf("{dn}") > 0) {
       return this.searchUserDn(username)
         .then(function (userDN: string) {
-          return BluebirdPromise.resolve(userGroupsFilter.replace("{dn}", ldapEscape.filter`${userDN}`.replace(/\\/g, "\\\\"));
+          return BluebirdPromise.resolve(userGroupsFilter.replace("{dn}", ldapEscape.filter`${userDN}`.replace(/\\/g, "\\\\")));
         });
     }
     else if (userGroupsFilter.indexOf("{uid}") > 0) {
